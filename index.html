@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>后会友期 · 测测你是友情里的哪种人</title>
+<meta name="description" content="12道题，测出你在友情里像《后会友期》里的哪位嘉宾。纯属娱乐，约上好友一起测！">
+<meta property="og:title" content="后会友期 · 测测你是友情里的哪种人">
+<meta property="og:description" content="12道题，测出你在友情里的性格底色">
+<style>
+  :root{
+    --bg:#fbf6ef; --card:#ffffff; --ink:#2b2a33; --sub:#6f6b78; --line:#ece4d8;
+    --main:#e8735a; --main-soft:#fde8e1; --accent:#5b7fd6; --gold:#e9b44c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;line-height:1.6}
+  body{min-height:100vh;background:
+    radial-gradient(circle at 10% 0%,#ffe3d6 0,transparent 40%),
+    radial-gradient(circle at 100% 30%,#dfe8ff 0,transparent 40%),var(--bg)}
+  .wrap{max-width:480px;margin:0 auto;padding:24px 18px 48px;min-height:100vh;display:flex;flex-direction:column}
+  .screen{display:none;flex:1;flex-direction:column;animation:fade .45s ease}
+  .screen.active{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+  /* 首页 */
+  .mountain{width:100%;height:150px;margin:8px 0 4px}
+  .tag{display:inline-block;font-size:12px;color:var(--main);background:var(--main-soft);padding:4px 12px;border-radius:99px;letter-spacing:1px}
+  h1{font-size:34px;line-height:1.25;margin:14px 0 10px;letter-spacing:1px}
+  h1 em{font-style:normal;color:var(--main)}
+  .lead{color:var(--sub);font-size:15px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0}
+  .chip{font-size:13px;background:#fff;border:1px solid var(--line);padding:6px 12px;border-radius:99px}
+  .btn{display:block;width:100%;border:0;border-radius:16px;padding:16px;font-size:17px;font-weight:600;cursor:pointer;transition:transform .15s,box-shadow .15s}
+  .btn:active{transform:scale(.98)}
+  .btn-main{background:linear-gradient(135deg,#f08a6c,#e0604a);color:#fff;box-shadow:0 8px 20px rgba(224,96,74,.3)}
+  .btn-ghost{background:#fff;color:var(--ink);border:1px solid var(--line);margin-top:10px}
+  .tip{font-size:12px;color:var(--sub);text-align:center;margin-top:14px}
+  .spacer{flex:1}
+
+  /* 答题 */
+  .top{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+  .back{border:0;background:#fff;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;border:1px solid var(--line);flex:none}
+  .back:disabled{opacity:.3}
+  .bar{flex:1;height:8px;background:#efe6da;border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#f5a07f,#e0604a);border-radius:99px;transition:width .35s}
+  .count{font-size:13px;color:var(--sub);min-width:42px;text-align:right}
+  .qscene{font-size:13px;color:var(--accent);font-weight:600;margin-bottom:6px}
+  .qtitle{font-size:22px;font-weight:700;line-height:1.45;margin-bottom:22px}
+  .opts{display:flex;flex-direction:column;gap:12px}
+  .opt{text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:15px 16px;font-size:15.5px;color:var(--ink);cursor:pointer;display:flex;gap:12px;align-items:flex-start;transition:all .15s;font-family:inherit;line-height:1.5}
+  .opt b{flex:none;width:26px;height:26px;border-radius:50%;background:var(--main-soft);color:var(--main);font-size:13px;display:flex;align-items:center;justify-content:center}
+  .opt:hover{border-color:#f3b8a6}
+  .opt.picked{border-color:var(--main);background:#fff5f1}
+  .opt.picked b{background:var(--main);color:#fff}
+
+  /* 结果 */
+  .loading{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:var(--sub)}
+  .spin{width:46px;height:46px;border-radius:50%;border:4px solid #f4dcd2;border-top-color:var(--main);animation:sp 1s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .hero{border-radius:24px;padding:26px 22px 22px;color:#fff;position:relative;overflow:hidden}
+  .hero:after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.14)}
+  .hero .small{font-size:13px;opacity:.9}
+  .hero .emoji{font-size:54px;line-height:1;margin:12px 0 8px}
+  .hero .role{font-size:15px;opacity:.95}
+  .hero .title{font-size:28px;font-weight:800;line-height:1.3;margin:2px 0 10px}
+  .hero .quote{font-size:14px;background:rgba(255,255,255,.18);border-radius:12px;padding:10px 12px}
+  .kw{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+  .kw span{font-size:12px;background:rgba(255,255,255,.22);padding:3px 10px;border-radius:99px}
+  .sec{background:#fff;border-radius:20px;padding:18px 18px;margin-top:14px;border:1px solid var(--line)}
+  .sec h3{font-size:16px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+  .sec p{font-size:14.5px;color:#46434f}
+  .sec ul{padding-left:18px;font-size:14.5px;color:#46434f}
+  .sec li{margin:4px 0}
+  .pair{display:flex;gap:10px}
+  .pair div{flex:1;border-radius:14px;padding:12px;font-size:13.5px}
+  .pair .good{background:#eaf6ee}
+  .pair .tune{background:#fff3e2}
+  .pair strong{display:block;font-size:14.5px;margin:2px 0}
+  .match-row{display:flex;align-items:center;gap:10px;margin:9px 0;font-size:14px}
+  .match-row .n{width:84px;flex:none}
+  .match-row .mb{flex:1;height:10px;background:#f2ebe1;border-radius:99px;overflow:hidden}
+  .match-row .mb i{display:block;height:100%;border-radius:99px;width:0;transition:width 1s ease}
+  .match-row .v{width:40px;text-align:right;color:var(--sub);font-variant-numeric:tabular-nums}
+  .actions{margin-top:18px}
+  footer{font-size:11.5px;color:#a19ba9;text-align:center;margin-top:26px;line-height:1.7}
+  .toast{position:fixed;left:50%;bottom:40px;transform:translateX(-50%) translateY(20px);background:rgba(40,38,48,.92);color:#fff;padding:10px 18px;border-radius:99px;font-size:14px;opacity:0;pointer-events:none;transition:all .25s;z-index:9}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;flex-direction:column;z-index:8;padding:20px}
+  .modal.show{display:flex}
+  .modal img{max-width:100%;max-height:78vh;border-radius:16px}
+  .modal p{color:#fff;font-size:14px;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- 首页 -->
+  <section class="screen active" id="home">
+    <span class="tag">后会友期 · 友情人格测试</span>
+    <svg class="mountain" viewBox="0 0 400 150" aria-hidden="true">
+      <defs>
+        <linearGradient id="m1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fb3ea"/><stop offset="1" stop-color="#dfe6fb"/></linearGradient>
+        <linearGradient id="m2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3a68d"/><stop offset="1" stop-color="#fbd9cc"/></linearGradient>
+      </defs>
+      <circle cx="320" cy="40" r="22" fill="#f6c46a" opacity=".85"/>
+      <path d="M0 150 L90 60 L140 100 L220 20 L300 95 L340 70 L400 120 L400 150 Z" fill="url(#m1)"/>
+      <path d="M220 20 L245 45 L232 42 L220 55 L208 42 L196 46 Z" fill="#fff"/>
+      <path d="M0 150 L60 110 L130 135 L200 95 L280 140 L360 105 L400 130 L400 150 Z" fill="url(#m2)"/>
+    </svg>
+    <h1>你在友情里，<br>是<em>哪位嘉宾</em>？</h1>
+    <p class="lead">从张掖到南迦巴瓦，四对旧友一路同行。<br>12 道小题，测测你在友情里的性格底色。</p>
+    <div class="chips">
+      <span class="chip">🏔 外冷内热的守望者</span>
+      <span class="chip">☀️ 真心全给的小太阳</span>
+      <span class="chip">🧭 清醒自在的边界派</span>
+      <span class="chip">🫶 两肋插刀的大家长</span>
+      <span class="chip">🌙 温柔细腻的共情者</span>
+      <span class="chip">🎮 直球热血的领队</span>
+      <span class="chip">🐱 嘴硬心软的傲娇派</span>
+      <span class="chip">📖 浪漫至上的唯一派</span>
+      <span class="chip">❓ 还有隐藏款</span>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn btn-main" id="startBtn">开始测试</button>
+    <p class="tip">约 2 分钟 · 凭第一直觉选就好</p>
+    <footer>非官方娱乐测试，结果为基于节目公开内容的趣味演绎<br>不代表嘉宾本人，也不构成任何心理学评估</footer>
+  </section>
+
+  <!-- 答题 -->
+  <section class="screen" id="quiz">
+    <div class="top">
+      <button class="back" id="backBtn" aria-label="上一题">‹</button>
+      <div class="bar"><i id="barFill"></i></div>
+      <span class="count" id="count">1/12</span>
+    </div>
+    <div class="qscene" id="qscene"></div>
+    <div class="qtitle" id="qtitle"></div>
+    <div class="opts" id="opts"></div>
+  </section>
+
+  <!-- 计算中 -->
+  <section class="screen" id="calc">
+    <div class="loading">
+      <div class="spin"></div>
+      <div id="calcText">观察室正在激烈讨论你…</div>
+    </div>
+  </section>
+
+  <!-- 结果 -->
+  <section class="screen" id="result">
+    <div class="hero" id="hero"></div>
+    <div class="sec"><h3>🌱 性格底色</h3><p id="rBase"></p></div>
+    <div class="sec"><h3>💬 你在友情里的样子</h3><ul id="rBehave"></ul></div>
+    <div class="sec"><h3>✨ 你的友情超能力</h3><p id="rPower"></p></div>
+    <div class="sec"><h3>🍵 给你的小小提醒</h3><p id="rTip"></p></div>
+    <div class="sec" id="pairSec"><h3>🤝 友情搭配</h3><div class="pair" id="rPair"></div></div>
+    <div class="sec"><h3>📊 你的嘉宾成分</h3><div id="rMatch"></div></div>
+    <div class="actions">
+      <button class="btn btn-main" id="saveBtn">生成结果图，发给朋友</button>
+      <button class="btn btn-ghost" id="copyBtn">复制结果文案</button>
+      <button class="btn btn-ghost" id="againBtn">再测一次</button>
+    </div>
+    <footer>非官方娱乐测试，结果为基于节目公开内容的趣味演绎<br>不代表嘉宾本人，也不构成任何心理学评估</footer>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="modal" id="modal"><img id="modalImg" alt="结果图"><p>长按图片保存 / 分享 · 点空白处关闭</p></div>
+
+<script>
+/* ========== 角色库 ========== */
+// weight：结果出现的权重系数（<1 表示降低出现概率）
+const ROLES = {
+  xf:{ name:"许飞型", title:"外冷内热的守望者", emoji:"🏔", color:["#6a85d8","#8fa6ea"], weight:1,
+    quote:"不常说爱，但记得你爱吃的每一样零食。",
+    keywords:["外冷内热","长情","重细节","不善解释"],
+    base:"你看起来酷酷的、有点距离感，其实情感浓度比谁都高。你不爱把在乎挂在嘴边，习惯把心意藏在细节里——朋友十几年前的一个小习惯，你都可能记得清清楚楚。你对友情的投入是“认定了就全情交付”的那种。",
+    behave:["一旦认定一个朋友，会给出非常完整的信任","默默记住朋友的喜好和小习惯，关键时刻才拿出来","被误会时更倾向“清者自清”，不太愿意一遍遍解释","嘴上说着“随便”，心里其实一直在等对方的回应"],
+    power:"长情与可靠。你是那种“多年不联系，一开口还是老样子”的朋友，时间很难冲淡你的心意。",
+    tip:"在乎的话可以说出口，误会也值得解释一句。你不必总是等对方先走过来，偶尔先迈一步，会发现对方也一直在原地。",
+    good:["张萌型","TA 会主动来找你，正好接住你的不善开口"],
+    tune:["厉娜型","你们都很在乎，但都在等对方先开口"] },
+
+  ln:{ name:"厉娜型", title:"真心全给的小太阳", emoji:"☀️", color:["#f0a03c","#f6c56b"], weight:1,
+    quote:"好吃的鸭舌第一个分给你，心里话也第一个讲给你。",
+    keywords:["真诚","热情","爱分享","重感情"],
+    base:"你是友情里的小太阳，天真、热情、毫无保留。好东西想第一时间和朋友分享，心里话也愿意全盘托出。你相信真心换真心，对朋友几乎不设防，这份纯粹在成年人的世界里非常珍贵。",
+    behave:["有好吃好玩的，第一反应是“要带上 TA”","愿意把自己的计划、心事、小秘密都讲给朋友","情绪写在脸上，开心和难过都很真实","容易被身边人的意见影响，感受来得快也来得深"],
+    power:"感染力。和你在一起，朋友会觉得被全然接纳，你能把普通的日子过成值得回忆的夏天。",
+    tip:"真心很珍贵，也值得被好好保护。遇到让你难过的“听说”，不妨直接问问当事人——一次坦诚的对话，可能省下很多年的心结。",
+    good:["青稚型","TA 的直球会帮你把话问清楚"],
+    tune:["许飞型","你们都把对方看得很重，却都不擅长先开口"] },
+
+  mty:{ name:"马天宇型", title:"清醒自在的边界派", emoji:"🧭", color:["#3fa58e","#6cc6ae"], weight:1,
+    quote:"关系再好，我也想保留说“不”的自由。",
+    keywords:["真实","有边界","对事不对人","行动派温柔"],
+    base:"你清醒、真实、有主见，在友情里非常重视“彼此尊重的空间”。你不喜欢被要求、被裹挟，觉得好朋友之间更不应该用关系去绑架对方。你看起来嘴上不饶人，其实温柔都藏在行动里。",
+    behave:["帮不帮忙取决于自己真实的状态，不会勉强答应","说话直接，常常是一群人里的“嘴替”","对事不对人，即使闹别扭也不会迁怒对方身边的人","不擅长表达在乎，但会默默做些照顾人的小事"],
+    power:"真诚的底线感。你说“好”就是真的好，你的友情没有表演，朋友在你这里永远能听到真话。",
+    tip:"有时候别人对你好，就只是因为你值得。试着接受那些不求回报的善意，你配得上很多很多的好。",
+    good:["许飞型","你们都尊重彼此的节奏，相处很松弛"],
+    tune:["张萌型","TA 的热情很真，但需要你们先对齐“边界”这件事"] },
+
+  zm:{ name:"张萌型", title:"两肋插刀的大家长", emoji:"🫶", color:["#e0604a","#f08a6c"], weight:1,
+    quote:"走到哪儿都记得给你带个马克杯。",
+    keywords:["热心肠","讲义气","行动力强","记得细节"],
+    base:"你是朋友圈里的“大家长”，能量满格、讲义气，朋友有事你第一个冲上去。你理解的友情是亲密无间、互相成就，常常想着“有好机会要拉朋友一把”。你见过很多人情冷暖，所以格外珍惜真诚的朋友。",
+    behave:["朋友有困难，会第一时间想办法、找资源","旅行路过什么好东西，会想着给朋友带一份","关系出现裂痕时，往往是你主动去修复","情绪上来时说话比较直接，事后自己可能都忘了"],
+    power:"把关系越过越暖的能力。你主动、热络、不计较，是很多段友情能长久维系的那根“主心骨”。",
+    tip:"你的好意很真，但每个朋友接收爱的方式不同。帮忙之前先问一句“你需要吗”，会让你的热情被更好地接住。",
+    good:["王子璇型","你的主动正好照顾到 TA 的细腻"],
+    tune:["马天宇型","你给的是热情，TA 要的是空间"] },
+
+  wzx:{ name:"王子璇型", title:"温柔细腻的共情者", emoji:"🌙", color:["#9a7ad6","#bba2ea"], weight:1,
+    quote:"怕你孤单，所以想把更多温暖介绍给你。",
+    keywords:["温柔","共情力强","会照顾人","习惯自省"],
+    base:"你温柔、敏感、共情力很强，总能第一时间察觉朋友的情绪变化。你常常把别人的感受放在自己前面，遇到问题第一反应是“是不是我哪里做得不够好”。你的善意不张扬，却很细密。",
+    behave:["会悄悄为朋友考虑，比如怕 TA 孤单而介绍新朋友","面对矛盾时，习惯先反思自己","有想法、有委屈时，常常先放在心里","对关系里细微的变化非常敏感"],
+    power:"共情。你能让朋友感觉“被看见、被理解”，是很多人心里最安全的倾诉对象。",
+    tip:"你不需要为所有事负责。照顾别人的同时，也记得照顾自己的感受——想说的话说出来，好的关系经得起坦诚。",
+    good:["张萌型","TA 的爽朗能帮你把心里话说出来"],
+    tune:["文吉儿型","你们都很细腻，需要更多直接沟通"] },
+
+  wje:{ name:"文吉儿型", title:"浪漫至上的唯一主义者", emoji:"📖", color:["#d9719b","#ec9cbc"], weight:0.8,
+    quote:"我想成为你故事里，最特别的那一章。",
+    keywords:["浪漫","感受力强","重仪式感","深情"],
+    base:"你是友情里的浪漫派，对关系有很高的期待，渴望一份“彼此唯一”的深厚联结。你感受力丰富、表达欲强，很会用文字和仪式感记录一段关系。对你来说，朋友不是“之一”，而是生命里重要的篇章。",
+    behave:["很看重自己在朋友心中的位置","擅长写长长的信、小作文，记录珍贵瞬间","情绪丰富，亲近和疏离都来得很真","会把关系里的点滴细节放在心上反复回味"],
+    power:"让友情变得有仪式感、有故事感。被你珍视过的朋友，都会记得那份热烈。",
+    tip:"好的友情不一定是“唯一”，而是“刚刚好”。给彼此一点空间，有时反而能让关系更长久。",
+    good:["许飞型","你们都很深情，懂得彼此的浓度"],
+    tune:["王子璇型","两个细腻的人，需要把感受说得更直白"] },
+
+  qz:{ name:"青稚型", title:"直球热血的领队", emoji:"🎮", color:["#3d8ed9","#6db0ef"], weight:1,
+    quote:"我希望我们一起，拿下下一个冠军。",
+    keywords:["直率","上进","有担当","主动和好"],
+    base:"你直率、上进、有冲劲，习惯在关系里扮演“带头大哥/大姐”。你对朋友的期待是“一起变好”，看到朋友松懈会忍不住提醒。你有话直说、不绕弯子，闹了别扭也愿意先放下面子去和好。",
+    behave:["会直接指出朋友的问题，因为真心希望 TA 更好","喜欢并肩做成一件事的感觉","矛盾出现时倾向当面说清，而不是冷处理","往往是先打招呼、先递台阶的那个人"],
+    power:"推动力。你能带着朋友一起成长，也最有勇气把误会当面解开。",
+    tip:"你的提醒是出于好意，但换个更温和的方式说出口，对方会更容易接受。先夸一句，再提建议，效果会好很多。",
+    good:["厉娜型","你的直球正好帮 TA 把话说开"],
+    tune:["白小纯型","你很直接，TA 很要面子，需要多一点耐心"] },
+
+  bxc:{ name:"白小纯型", title:"嘴硬心软的傲娇派", emoji:"🐱", color:["#f08f6a","#f7b28f"], weight:0.95,
+    quote:"嘴上说着“才不要”，最后一秒还是点了接受。",
+    keywords:["傲娇","真性情","重公平","心软"],
+    base:"你是典型的嘴硬心软，越在乎越不想表现出来。你很看重公平和面子，被说中心事时第一反应是“我才没有”，但行动总会出卖你。你的友情像少年人的友情，吵得热闹，好得真诚。",
+    behave:["在意朋友，但嘴上偏要说“无所谓”","比起被批评，更在意“为什么只说我”","闹别扭时会说气话，但很快就会心软","需要对方递个台阶，你就会顺着走下来"],
+    power:"真性情。你的情绪真实不做作，跟你做朋友，能吵架也能秒和好。",
+    tip:"偶尔放下一点面子，直接说“我其实很在意”，你会发现关系一下子轻松很多。",
+    good:["张萌型","TA 很会递台阶，你也很会接"],
+    tune:["青稚型","你们都很在乎，但都不想先低头"] },
+
+  none:{ name:"隐藏款", title:"节目组请不起的神秘嘉宾", emoji:"🦄", color:["#5a5a6e","#8a8aa3"], weight:1,
+    quote:"选角导演联系了 300 组旧友，唯独没敢联系你。",
+    keywords:["情绪稳定","友情健康","没有素材","节目组克星"],
+    base:"恭喜你，八位嘉宾谁都不像你！据说节目从上千组网友提名里一路筛到只剩 4 组，而你大概在第一轮就被刷掉了——原因是：你的友情太健康，拍不出冲突。吵架？你们吵着吵着就去吃火锅了。断联？你只是忘了回消息，三个月后回一句“哈哈”对方也秒接。",
+    behave:["和朋友闹矛盾的持续时间通常不超过一顿饭","没有什么“画地为牢”，最多“画饼充饥”","朋友圈分组？你连自己有几个分组都不知道","对“唯一性”的理解是：唯一的一份外卖不能分"],
+    power:"情绪稳定，自带免疫。任何“友情狗血剧本”到你这里都会自动变成情景喜剧。",
+    tip:"你可能是观察室嘉宾的最佳人选——坐在那里嗑瓜子，看别人的友情抓马，然后说一句：“这有啥，说开不就完了？”",
+    good:["所有人","你的松弛感就是最好的友情黏合剂"],
+    tune:["节目组","你让他们没有素材可剪"] }
+};
+
+/* ========== 题库 ========== */
+// s：选项计分，none 为“隐藏款”分数
+const QUESTIONS = [
+  {scene:"深夜 23:47", q:"好朋友突然发来一句“在吗”，你会：", o:[
+    {t:"秒回“怎么了？要不要我过来”", s:{zm:2,xf:1}},
+    {t:"先看看自己状态，回一句“在的，你说”", s:{mty:2,qz:1}},
+    {t:"盯着这两个字，脑补了半小时剧情", s:{wzx:2,wje:1}},
+    {t:"回“在，是要借钱还是要骂人”", s:{bxc:2,ln:1}}
+  ]},
+  {scene:"有点为难", q:"朋友请你帮一个你不太想帮的忙：", o:[
+    {t:"直接说不行，把理由讲清楚", s:{mty:3}},
+    {t:"硬着头皮答应，朋友嘛", s:{wzx:2,zm:1}},
+    {t:"答应了，但嘴上吐槽“下不为例”", s:{bxc:2,xf:1}},
+    {t:"先问清楚需要什么，一起想办法", s:{qz:2,zm:1}}
+  ]},
+  {scene:"关于定义", q:"你心中的“最好的朋友”是：", o:[
+    {t:"只有一个，独一无二，谁也替代不了", s:{wje:3,xf:1}},
+    {t:"能并肩打仗、一起拿冠军的战友", s:{qz:2,bxc:1}},
+    {t:"不常联系，但一见面就像从没分开", s:{mty:2,xf:1}},
+    {t:"无话不说，什么心事都可以分享", s:{ln:3,zm:1}},
+    {t:"我的床。它从不让我失望", s:{none:3}}
+  ]},
+  {scene:"新面孔出现", q:"你的好友最近和另一个人走得很近，你：", o:[
+    {t:"嘴上说“没事啊”，心里打翻了醋坛", s:{bxc:2,wje:1}},
+    {t:"默默往后退一步，不想打扰", s:{xf:2,wzx:1}},
+    {t:"一起玩呗！朋友越多越热闹", s:{zm:2,qz:1}},
+    {t:"有点失落，开始想是不是自己哪里没做好", s:{wzx:3}}
+  ]},
+  {scene:"听说……", q:"有人告诉你，朋友在背后说了你不好的话：", o:[
+    {t:"直接去问 TA，当面说清楚", s:{qz:3}},
+    {t:"难过了好久，但不太敢去问", s:{ln:3,wzx:1}},
+    {t:"不追问、不解释，先冷一冷", s:{xf:2,mty:1}},
+    {t:"表面无所谓，心里默默记下这一笔", s:{bxc:2,wje:1}}
+  ]},
+  {scene:"吵架之后", q:"和朋友闹别扭后，你通常：", o:[
+    {t:"先递台阶的那个人", s:{zm:2,qz:2}},
+    {t:"等对方来找我，TA 不来我也不去", s:{xf:2,bxc:1}},
+    {t:"把整件事在心里反复复盘", s:{wje:2,wzx:1}},
+    {t:"需要独处一段时间，冷静了再说", s:{mty:2}},
+    {t:"吵着吵着就一起去吃火锅了，吵的啥忘了", s:{none:3}}
+  ]},
+  {scene:"表达在乎", q:"你最常用的“我在乎你”的方式是：", o:[
+    {t:"记得 TA 所有喜好，路过看到就买", s:{zm:3}},
+    {t:"默默做点事，但嘴上绝不承认", s:{mty:2,bxc:1}},
+    {t:"写一段长长的话 / 小作文", s:{wje:2,xf:1}},
+    {t:"好吃的好玩的，第一时间分享给 TA", s:{ln:3}}
+  ]},
+  {scene:"朋友的低谷", q:"好朋友最近事业停滞、状态低迷，你会：", o:[
+    {t:"帮 TA 找机会、介绍资源，拉一把", s:{zm:3}},
+    {t:"直说“你最近有点松懈了，振作点”", s:{qz:3}},
+    {t:"尊重 TA 的节奏，不去打扰", s:{mty:2,xf:1}},
+    {t:"陪 TA 吐槽、吃喝，情绪价值拉满", s:{ln:2,wzx:1}}
+  ]},
+  {scene:"多年未见", q:"一位很久没联系的老朋友突然约你见面：", o:[
+    {t:"立马答应，好开心！", s:{ln:2,zm:1}},
+    {t:"先想想“为什么突然找我”", s:{mty:2,xf:1}},
+    {t:"嘴上说“看情况吧”，提前一天就选好了衣服", s:{bxc:2,wje:1}},
+    {t:"有点紧张，怕冷场、怕自己表现不好", s:{wzx:2}},
+    {t:"已读，然后忘了回", s:{none:3}}
+  ]},
+  {scene:"朋友眼中的你", q:"朋友们最常这样形容你：", o:[
+    {t:"靠谱的大哥 / 大姐，有事找你准没错", s:{qz:2,zm:1}},
+    {t:"看着冷冷的，熟了才知道很暖", s:{xf:3}},
+    {t:"很真实，有啥说啥", s:{mty:2,ln:1}},
+    {t:"细腻温柔，很会照顾别人的情绪", s:{wzx:2,wje:1}}
+  ]},
+  {scene:"高原旅行 · 分房", q:"一起旅行要分房间了，你希望：", o:[
+    {t:"和最好的朋友一间，聊个通宵", s:{ln:2,xf:1}},
+    {t:"自己一间，最舒服自在", s:{mty:2,wje:1}},
+    {t:"都行，跟谁住都无所谓", s:{zm:1,qz:1}},
+    {t:"嘴上说“才不要和 TA 一间”，但没真的拒绝", s:{bxc:3}}
+  ]},
+  {scene:"终点站", q:"如果一段友情真的走到了尽头，你会：", o:[
+    {t:"感谢你曾出现在我的人生里", s:{xf:2,ln:1}},
+    {t:"好聚好散，各自安好", s:{mty:2,wzx:1}},
+    {t:"还是想再努力争取一次", s:{zm:2,qz:1}},
+    {t:"需要一个答案，才能真正放下", s:{wje:2,bxc:1}},
+    {t:"没关系，外卖小哥每天都来看我", s:{none:3}}
+  ]}
+];
+
+// 平局时的优先顺序（越靠前越优先）
+const PRIORITY = ["zm","mty","qz","xf","wzx","bxc","ln","wje"];
+const LETTERS = "ABCDE";
+// 每个角色在随机作答下的期望得分（用于归一化）
+const EXPECT = {};
+Object.keys(ROLES).forEach(k=>EXPECT[k]=0);
+QUESTIONS.forEach(q=>q.o.forEach(o=>{for(const k in o.s) EXPECT[k]+=o.s[k]/q.o.length;}));
+
+/* ========== 状态 ========== */
+let cur = 0, answers = [];
+const $ = id => document.getElementById(id);
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));$(id).classList.add("active");window.scrollTo(0,0);}
+
+function renderQ(){
+  const item = QUESTIONS[cur];
+  $("count").textContent = (cur+1)+"/"+QUESTIONS.length;
+  $("barFill").style.width = (cur/QUESTIONS.length*100)+"%";
+  $("qscene").textContent = item.scene;
+  $("qtitle").textContent = item.q;
+  $("backBtn").disabled = cur===0;
+  const box = $("opts"); box.innerHTML="";
+  item.o.forEach((op,i)=>{
+    const b=document.createElement("button");
+    b.className="opt"+(answers[cur]===i?" picked":"");
+    b.innerHTML=`<b>${LETTERS[i]}</b><span>${op.t}</span>`;
+    b.onclick=()=>pick(i,b);
+    box.appendChild(b);
+  });
+}
+let locking=false;
+function pick(i,el){
+  if(locking) return; locking=true;
+  answers[cur]=i;
+  document.querySelectorAll(".opt").forEach(x=>x.classList.remove("picked"));
+  el.classList.add("picked");
+  setTimeout(()=>{
+    locking=false;
+    if(cur<QUESTIONS.length-1){cur++;renderQ();}
+    else finish();
+  },260);
+}
+
+/* ========== 计分 ========== */
+function compute(){
+  const raw={}; Object.keys(ROLES).forEach(k=>raw[k]=0);
+  let nonePicks=0;
+  answers.forEach((ai,qi)=>{
+    const s=QUESTIONS[qi].o[ai].s;
+    for(const k in s){raw[k]+=s[k]; if(k==="none") nonePicks++;}
+  });
+  // 按各角色的“期望得分”归一化，保证题目分值分布不均时各角色出现概率公平，再乘以权重
+  const scored = PRIORITY.map(k=>({k,v:raw[k]/EXPECT[k]*ROLES[k].weight}))
+    .sort((a,b)=> b.v-a.v || PRIORITY.indexOf(a.k)-PRIORITY.indexOf(b.k));
+  // 隐藏款触发：选了≥3个“离谱选项”，或选了2个且其他角色都不突出
+  let key = scored[0].k;
+  if(nonePicks>=3 || (nonePicks===2 && scored[0].v<1.4)) key="none";
+  return {key, scored};
+}
+
+const CALC_TEXTS=["观察室正在激烈讨论你…","张泉灵老师正在追问细节…","李维嘉翻出了一张题卡…","心理学教授正在拆解你的友情…"];
+function finish(){
+  $("barFill").style.width="100%";
+  show("calc");
+  let t=0; const it=setInterval(()=>{t++;$("calcText").textContent=CALC_TEXTS[t%CALC_TEXTS.length];},550);
+  setTimeout(()=>{clearInterval(it);renderResult(compute());},1800);
+}
+
+let lastResult=null;
+function renderResult({key,scored}){
+  const r=ROLES[key]; lastResult={key,scored};
+  $("hero").style.background=`linear-gradient(135deg,${r.color[0]},${r.color[1]})`;
+  $("hero").innerHTML=`<div class="small">你在友情里是</div>
+    <div class="emoji">${r.emoji}</div>
+    <div class="role">${r.name}</div>
+    <div class="title">${r.title}</div>
+    <div class="quote">“${r.quote}”</div>
+    <div class="kw">${r.keywords.map(k=>`<span>#${k}</span>`).join("")}</div>`;
+  $("rBase").textContent=r.base;
+  $("rBehave").innerHTML=r.behave.map(b=>`<li>${b}</li>`).join("");
+  $("rPower").textContent=r.power;
+  $("rTip").textContent=r.tip;
+  $("rPair").innerHTML=`<div class="good">最合拍<strong>${r.good[0]}</strong>${r.good[1]}</div>
+    <div class="tune">需要磨合<strong>${r.tune[0]}</strong>${r.tune[1]}</div>`;
+  // 成分条：展示前 4 名
+  const top=scored.slice(0,4), max=top[0].v||1;
+  let rows = top.map((x,i)=>({name:ROLES[x.k].name, pct: Math.round(i===0&&key!=="none"?88+Math.min(10,(x.v-top[1].v)*25):40+46*x.v/max), color:ROLES[x.k].color[0]}));
+  if(key==="none") rows = [{name:"隐藏款",pct:99,color:ROLES.none.color[0]}].concat(rows.slice(0,3).map(x=>({...x,pct:Math.min(x.pct,30)})));
+  rows.sort((a,b)=>b.pct-a.pct);
+  $("rMatch").innerHTML=rows.map(x=>`<div class="match-row"><span class="n">${x.name}</span><span class="mb"><i style="background:${x.color}" data-w="${x.pct}"></i></span><span class="v">${x.pct}%</span></div>`).join("");
+  show("result");
+  setTimeout(()=>document.querySelectorAll(".mb i").forEach(i=>i.style.width=i.dataset.w+"%"),80);
+}
+
+/* ========== 分享 ========== */
+function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800);}
+function resultText(){
+  const r=ROLES[lastResult.key];
+  return `我在《后会友期》友情人格测试里是【${r.name}·${r.title}】${r.emoji}\n“${r.quote}”\n#${r.keywords.join(" #")}\n来测测你是哪位嘉宾：${location.href}`;
+}
+$("copyBtn").onclick=()=>{
+  const txt=resultText();
+  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(txt).then(()=>toast("已复制，快去发给朋友吧"));}
+  else{const ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");toast("已复制，快去发给朋友吧");}catch(e){toast("复制失败，请手动复制");}ta.remove();}
+};
+
+function wrapText(ctx,text,x,y,maxW,lh){
+  let line="",lines=0;
+  for(const ch of text){
+    if(ctx.measureText(line+ch).width>maxW){ctx.fillText(line,x,y);line=ch;y+=lh;lines++;}
+    else line+=ch;
+  }
+  ctx.fillText(line,x,y); return y+lh;
+}
+$("saveBtn").onclick=()=>{
+  const r=ROLES[lastResult.key];
+  const W=750,H=1180,c=document.createElement("canvas");c.width=W;c.height=H;
+  const ctx=c.getContext("2d");
+  const font=(s,w)=>`${w||"normal"} ${s}px -apple-system,"PingFang SC","Microsoft YaHei",sans-serif`;
+  ctx.fillStyle="#fbf6ef";ctx.fillRect(0,0,W,H);
+  // 卡片
+  const g=ctx.createLinearGradient(0,0,W,620);g.addColorStop(0,r.color[0]);g.addColorStop(1,r.color[1]);
+  ctx.fillStyle=g;ctx.beginPath();ctx.roundRect?ctx.roundRect(40,40,W-80,620,40):ctx.rect(40,40,W-80,620);ctx.fill();
+  ctx.fillStyle="rgba(255,255,255,.14)";ctx.beginPath();ctx.arc(W-90,90,140,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#fff";
+  ctx.font=font(28);ctx.fillText("后会友期 · 我在友情里是",90,130);
+  ctx.font=font(120);ctx.fillText(r.emoji,90,290);
+  ctx.font=font(34);ctx.fillText(r.name,90,360);
+  ctx.font=font(56,"bold");wrapText(ctx,r.title,90,435,W-180,70);
+  ctx.font=font(28);wrapText(ctx,"“"+r.quote+"”",90,540,W-180,42);
+  ctx.font=font(26);ctx.fillText(r.keywords.map(k=>"#"+k).join("  "),90,625);
+  // 正文
+  ctx.fillStyle="#2b2a33";ctx.font=font(32,"bold");ctx.fillText("✨ 我的友情超能力",60,730);
+  ctx.fillStyle="#46434f";ctx.font=font(28);let y=wrapText(ctx,r.power,60,780,W-120,44);
+  ctx.fillStyle="#2b2a33";ctx.font=font(32,"bold");ctx.fillText("🤝 最合拍的朋友："+r.good[0],60,y+30);
+  ctx.fillStyle="#46434f";ctx.font=font(28);wrapText(ctx,r.good[1],60,y+80,W-120,44);
+  // 底部
+  ctx.fillStyle="#e0604a";ctx.font=font(30,"bold");ctx.fillText("你是哪位嘉宾？扫码 / 搜索来测测 →",60,H-110);
+  ctx.fillStyle="#a19ba9";ctx.font=font(22);ctx.fillText("非官方娱乐测试 · 结果仅供娱乐",60,H-60);
+  $("modalImg").src=c.toDataURL("image/png");$("modal").classList.add("show");
+};
+$("modal").onclick=e=>{if(e.target.id==="modal")$("modal").classList.remove("show");};
+
+/* ========== 事件 ========== */
+$("startBtn").onclick=()=>{cur=0;answers=[];renderQ();show("quiz");};
+$("backBtn").onclick=()=>{if(cur>0){cur--;renderQ();}};
+$("againBtn").onclick=()=>{cur=0;answers=[];show("home");};
+</script>
+</body>
+</html>
